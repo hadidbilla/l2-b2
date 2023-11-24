@@ -1,5 +1,12 @@
 import Joi from 'joi';
 import { TUser } from './user.interface';
+
+const orderValidateSchema = Joi.object({
+  productName: Joi.string().required(),
+  price: Joi.number().required(),
+  quantity: Joi.number().required(),
+});
+
 const userValidateSchema = Joi.object<TUser>({
   userId: Joi.string().required(),
   username: Joi.string().required(),
@@ -17,13 +24,10 @@ const userValidateSchema = Joi.object<TUser>({
     city: Joi.string().required(),
     country: Joi.string().required(),
   }).required(),
-  orders: Joi.array().items(
-    Joi.object({
-      productName: Joi.string().required(),
-      price: Joi.number().required(),
-      quantity: Joi.number().required(),
-    }),
-  ),
+  orders: Joi.array().items(orderValidateSchema),
 });
 
-export default userValidateSchema;
+export {
+  userValidateSchema,
+  orderValidateSchema
+};

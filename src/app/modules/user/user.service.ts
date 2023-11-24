@@ -22,4 +22,84 @@ const getUserByIdService = async (userId: string) => {
   return user;
 }
 
-export { createUserService, getAllUsersService, getUserByIdService };
+//update user
+const updateUserByIdService = async (userId: string, userData: TUser) => {
+  if (!await UserModel.isUserExist(userId)) {
+    throw new Error('User not found');
+  }
+
+  const updatedUser = await UserModel.findOneAndUpdate({ userId }, userData, { new: true });
+  return updatedUser;
+
+}
+
+//delete user
+const deleteUserByIdService = async (userId: string) => {
+  if (!await UserModel.isUserExist(userId)) {
+    throw new Error('User not found');
+  }
+  const deletedUser = await UserModel.findOneAndDelete({ userId });
+  return deletedUser;
+}
+
+//add order to user by id
+const addOrderToUserByIdService = async (userId: string, order: any) => {
+  if (!await UserModel.isUserExist(userId)) {
+    throw new Error('User not found');
+  }
+  const orderUpdated = await UserModel.findOneAndUpdate({ userId }, { $push: { orders: order } }, { new: true });
+  return orderUpdated;
+}
+
+//get all orders of user by id
+const getAllOrdersOfUserByIdService = async (userId: string) => {
+  if (!await UserModel.isUserExist(userId)) {
+    throw new Error('User not found');
+  }
+  const order = await UserModel.findOne({ userId }).populate('orders');
+  return order;
+}
+
+//Calculate Total Price of Orders for a Specific User
+const calculateTotalPriceOfOrdersService = async (userId: string) => {
+  const aggregationPipeline = [
+    { $match: { userId: userId } }, // Match the user by their ID
+    {
+      $lookup: {
+        from: 'orders',
+        localField: 'orders',
+        foreignField: '_id',
+        as: 'userOrders',
+      },
+    },
+    {
+      $unwind: '$userOrders',
+    },
+    {
+      $group: {
+        _id: null,
+        totalPrice: { $sum: '$userOrders.totalPrice' },
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        totalPrice: 1,
+      },
+    },
+  ];
+
+  const result = await UserModel.aggregate(aggregationPipeline);
+  return result[0].totalPrice ?? 0;
+}
+
+export { 
+  createUserService,
+  getAllUsersService,
+  getUserByIdService,
+  updateUserByIdService,
+  deleteUserByIdService,
+  addOrderToUserByIdService,
+  getAllOrdersOfUserByIdService,
+  calculateTotalPriceOfOrdersService
+};

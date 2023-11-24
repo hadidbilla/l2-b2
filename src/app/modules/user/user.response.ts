@@ -1,4 +1,4 @@
-import { TUser } from './user.interface';
+import { TUser,TOrder } from './user.interface';
 
 const formatResponse = (user: TUser, msg?: string) => {
   return {
@@ -49,4 +49,20 @@ const getAllUserFormatResponse = (users: TUser[], msg?:string) => {
   };
 }
 
-export { formatResponse, getAllUserFormatResponse };
+const getAllOrdersOfUserByIdFormatResponse = (orders: TOrder[], msg?:string) => {
+  return {
+    success: true,
+    message: msg ?? 'Orders fetched successfully!',
+    data: {
+      orders: orders.map((order) => {
+        return {
+          productName: order.productName,
+          price: order.price,
+          quantity: order.quantity,
+        };
+      }),
+    },
+  };
+}
+
+export { formatResponse, getAllUserFormatResponse, getAllOrdersOfUserByIdFormatResponse };
