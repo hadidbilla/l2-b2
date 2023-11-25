@@ -137,7 +137,6 @@ const createOrder = async (req: Request, res: Response) => {
       data: null,
     });
   } catch (error: any) {
-    console.log('error', error);
     res.status(500).json({ error: error.message });
   }
 };
