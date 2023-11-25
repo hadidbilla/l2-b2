@@ -51,6 +51,13 @@ const getAllUserFormatResponse = (users: TUser[], msg?: string) => {
           city: user.address.city,
           country: user.address.country,
         },
+        orders: user.orders.map((order) => {
+          return {
+            productName: order.productName,
+            price: order.price,
+            quantity: order.quantity,
+          };
+        }),
       };
     }),
   };
