@@ -1,4 +1,4 @@
-import { TUser,TOrder } from './user.interface';
+import { TUser, TOrder } from './user.interface';
 
 const formatResponse = (user: TUser, msg?: string) => {
   return {
@@ -20,13 +20,20 @@ const formatResponse = (user: TUser, msg?: string) => {
         city: user.address.city,
         country: user.address.country,
       },
+      orders: user.orders.map((order) => {
+        return {
+          productName: order.productName,
+          price: order.price,
+          quantity: order.quantity,
+        };
+      }),
     },
   };
 };
 
 // get all users
 
-const getAllUserFormatResponse = (users: TUser[], msg?:string) => {
+const getAllUserFormatResponse = (users: TUser[], msg?: string) => {
   return {
     success: true,
     message: msg ?? 'Users fetched successfully!',
@@ -47,9 +54,12 @@ const getAllUserFormatResponse = (users: TUser[], msg?:string) => {
       };
     }),
   };
-}
+};
 
-const getAllOrdersOfUserByIdFormatResponse = (orders: TOrder[], msg?:string) => {
+const getAllOrdersOfUserByIdFormatResponse = (
+  orders: TOrder[],
+  msg?: string,
+) => {
   return {
     success: true,
     message: msg ?? 'Orders fetched successfully!',
@@ -63,6 +73,10 @@ const getAllOrdersOfUserByIdFormatResponse = (orders: TOrder[], msg?:string) => 
       }),
     },
   };
-}
+};
 
-export { formatResponse, getAllUserFormatResponse, getAllOrdersOfUserByIdFormatResponse };
+export {
+  formatResponse,
+  getAllUserFormatResponse,
+  getAllOrdersOfUserByIdFormatResponse,
+};
