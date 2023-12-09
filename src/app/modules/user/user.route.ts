@@ -1,23 +1,25 @@
 import express from 'express';
-import { createUser,getAllUsers, getUserById, updateUserById, deleteUserById, createOrder, getAllOrdersOfUserById,calculateTotalPriceOfOrders  } from './user.controller';
+import { userController } from './user.controller';
 
 const router = express.Router();
 
-router.get('/', getAllUsers);
+router.get('/', userController.getAllUsers);
 
-router.post('/create', createUser);
+router.post('/create', userController.createUser);
 
-router.get('/:userId', getUserById);
+router.get('/:userId', userController.getUserById);
 
-router.put('/:userId', updateUserById);
+router.put('/:userId', userController.updateUserById);
 
-router.delete('/:userId', deleteUserById);
+router.delete('/:userId', userController.deleteUserById);
 
-router.put('/:userId/orders', createOrder);
+router.put('/:userId/orders', userController.createOrder);
 
-router.get('/:userId/orders', getAllOrdersOfUserById);
+router.get('/:userId/orders', userController.getAllOrdersOfUserById);
 
-router.get('/:userId/orders/total-price', calculateTotalPriceOfOrders);
-
+router.get(
+  '/:userId/orders/total-price',
+  userController.calculateTotalPriceOfOrders,
+);
 
 export const userRouter = router;

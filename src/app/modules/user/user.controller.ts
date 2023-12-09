@@ -182,7 +182,7 @@ const calculateTotalPriceOfOrders = async (req: Request, res: Response) => {
   }
 };
 
-export {
+export const userController = {
   createUser,
   getAllUsers,
   getUserById,
